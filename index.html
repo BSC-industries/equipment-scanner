@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Equipment"
+    >
+
+    <link
+        rel="manifest"
+        href="manifest.webmanifest"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="icon.svg"
+    >
+
+    <title>Equipment Scanner</title>
+
+
+    <style>
+
+        :root {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: #111827;
+            background: #f3f4f6;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 18px 16px;
+        }
+
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+
+        .wrap {
+            max-width: 720px;
+            margin: auto;
+            padding: 16px 16px 100px;
+        }
+
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 12px #0000000d;
+        }
+
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+
+        .between {
+            justify-content: space-between;
+        }
+
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 15px;
+            background: #111827;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+        button.secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+
+        button.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+
+        button.big {
+            width: 100%;
+            font-size: 17px;
+            padding: 15px;
+        }
+
+
+        .scan {
+            font-size: 28px;
+            text-align: center;
+            padding: 26px 10px;
+        }
+
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 11px;
+            padding: 12px;
+            background: white;
+        }
+
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+
+        .field {
+            margin: 12px 0;
+        }
+
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+
+        .number {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+
+        .muted {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+        .badge.hylla {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+
+        .badge.verkstad {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+
+        .badge.flytt {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+
+        .badge.tvätthallen {
+            background: #cffafe;
+            color: #155e75;
+        }
+
+
+        .badge.tillbehör {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+        .item {
+            border-top: 1px solid #eeeeee;
+            padding: 14px 0;
+            cursor: pointer;
+        }
+
+
+        .item:first-child {
+            border-top: 0;
+        }
+
+
+        .item:active {
+            background: #f9fafb;
+        }
+
+
+        .empty {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+
+        #camera {
+            width: 100%;
+            border-radius: 14px;
+            background: #111111;
+            display: block;
+            max-height: 55vh;
+            object-fit: cover;
+        }
+
+
+        .cameraBox {
+            position: relative;
+        }
+
+
+        .guide {
+            position: absolute;
+            left: 10%;
+            right: 10%;
+            top: 35%;
+            height: 30%;
+            border: 3px solid white;
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px #00000055;
+            pointer-events: none;
+        }
+
+
+        #message {
+            margin: 10px 0;
+            padding: 11px;
+            border-radius: 10px;
+            background: #eef2ff;
+            color: #3730a3;
+            display: none;
+        }
+
+
+        .tag-help {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+
+        .tag-checkbox {
+            display: flex !important;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            cursor: pointer;
+        }
+
+
+        .tag-checkbox input {
+            width: 22px;
+            height: 22px;
+            margin: 0;
+        }
+
+
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+
+        /*
+         * PRINT / PDF REPORT
+         */
+
+        .printReport {
+            display: none;
+        }
+
+
+        @media print {
+
+            @page {
+                size: A4 portrait;
+                margin: 15mm;
+            }
+
+
+            body {
+                background: white;
+            }
+
+
+            header,
+            main,
+            .footer {
+                display: none !important;
+            }
+
+
+            .printReport {
+                display: block !important;
+            }
+
+
+            .printReport h1 {
+                font-size: 20px;
+                margin: 0 0 5px;
+            }
+
+
+            .printReport .printDate {
+                color: #666;
+                font-size: 11px;
+                margin-bottom: 15px;
+            }
+
+
+            .printReport table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11px;
+            }
+
+
+            .printReport th,
+            .printReport td {
+                border: 1px solid #999;
+                padding: 6px;
+                text-align: left;
+                vertical-align: top;
+            }
+
+
+            .printReport th {
+                font-weight: bold;
+                background: #eeeeee;
+            }
+
+
+            .printReport .rowNumber {
+                width: 35px;
+                text-align: center;
+            }
+
+
+            .printReport .equipmentNumber {
+                width: 100px;
+                font-weight: bold;
+            }
+
+
+            .printReport .tag {
+                width: 90px;
+                font-weight: bold;
+            }
+
+
+            .printReport tr {
+                break-inside: avoid;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <header>
+
+        <h1>
+            Equipment Scanner
+        </h1>
+
+    </header>
+
+
+    <main class="wrap">
+
+
+        <!-- HOME -->
+
+        <section id="home">
+
+
+            <div class="card">
+
+                <button
+                    class="big scan"
+                    id="openCamera"
+                    type="button"
+                >
+                    📷 Scan Equipment Number
+                </button>
+
+
+                <p
+                    class="muted"
+                    style="text-align: center; margin-bottom: 0;"
+                >
+                    Scan or enter a 5- or 6-digit equipment number.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+
+                <div class="row between">
+
+                    <strong>
+                        Equipment
+                    </strong>
+
+
+                    <button
+                        class="secondary"
+                        id="manualAdd"
+                        type="button"
+                    >
+                        ＋ Manual
+                    </button>
+
+                </div>
+
+
+                <div class="field">
+
+                    <input
+                        id="search"
+                        type="search"
+                        placeholder="Search numbers or notes…"
+                    >
+
+                </div>
+
+
+                <div class="row">
+
+                    <select id="filter">
+
+                        <option value="">
+                            All statuses
+                        </option>
+
+                        <option value="Hylla">
+                            Hylla
+                        </option>
+
+                        <option value="Verkstad">
+                            Verkstad
+                        </option>
+
+                        <option value="Flytt">
+                            Flytt
+                        </option>
+
+                        <option value="Tvätthallen">
+                            Tvätthallen
+                        </option>
+
+                        <option value="Tillbehör">
+                            Tillbehör
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        class="secondary"
+                        id="exportPdf"
+                        type="button"
+                    >
+                        Export PDF
+                    </button>
+
+                </div>
+
+
+                <div id="list"></div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- SCANNER -->
+
+        <section
+            id="scanner"
+            class="hidden"
+        >
+
+
+            <div class="card">
+
+
+                <div class="row between">
+
+                    <strong>
+                        Scan number
+                    </strong>
+
+
+                    <button
+                        class="secondary"
+                        id="closeCamera"
+                        type="button"
+                    >
+                        Close
+                    </button>
+
+                </div>
+
+
+                <p class="muted">
+                    Center the etched number inside the box.
+                    This version captures a photo and lets you
+                    confirm the number.
+                </p>
+
+
+                <div class="cameraBox">
+
+                    <video
+                        id="camera"
+                        autoplay
+                        playsinline
+                        muted
+                    ></video>
+
+
+                    <div class="guide"></div>
+
+                </div>
+
+
+                <div style="height: 10px;"></div>
+
+
+                <button
+                    class="big"
+                    id="capture"
+                    type="button"
+                >
+                    Capture Number
+                </button>
+
+
+                <canvas
+                    id="canvas"
+                    class="hidden"
+                ></canvas>
+
+
+                <div
+                    id="captureResult"
+                    class="hidden"
+                >
+
+
+                    <div class="field">
+
+                        <label for="capturedNumber">
+                            Number
+                        </label>
+
+
+                        <input
+                            id="capturedNumber"
+                            inputmode="numeric"
+                            maxlength="6"
+                            placeholder="5 or 6 digits"
+                        >
+
+                    </div>
+
+
+                    <div id="message"></div>
+
+
+                    <button
+                        class="big"
+                        id="useCaptured"
+                        type="button"
+                    >
+                        Use Number
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- EDITOR -->
+
+        <section
+            id="editor"
+            class="hidden"
+        >
+
+
+            <div class="card">
+
+
+                <div class="row between">
+
+                    <strong id="editorTitle">
+                        Add Equipment
+                    </strong>
+
+
+                    <button
+                        class="secondary"
+                        id="cancelEdit"
+                        type="button"
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+
+                <!-- MAIN STATUS -->
+
+                <div class="field">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+
+                    <select id="status">
+
+                        <option value="">
+                            No main status
+                        </option>
+
+                        <option value="Hylla">
+                            Hylla
+                        </option>
+
+                        <option value="Verkstad">
+                            Verkstad
+                        </option>
+
+                        <option value="Flytt">
+                            Flytt
+                        </option>
+
+                        <option value="Tillbehör">
+                            Tillbehör
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TVÄTTHALLEN SPECIAL TAG -->
+
+                <div class="field">
+
+                    <label>
+                        Extra tag
+                    </label>
+
+
+                    <label class="tag-checkbox">
+
+                        <input
+                            id="tvatthallen"
+                            type="checkbox"
+                        >
+
+                        <span>
+                            Tvätthallen
+                        </span>
+
+                    </label>
+
+
+                    <div class="tag-help">
+                        Tvätthallen can be used by itself
+                        or together with one other status.
+                    </div>
+
+                </div>
+
+
+                <!-- EQUIPMENT NUMBER -->
+
+                <div class="field">
+
+                    <label for="number">
+                        Equipment number
+                    </label>
+
+
+                    <input
+                        id="number"
+                        inputmode="numeric"
+                        maxlength="6"
+                        placeholder="e.g. 583921"
+                    >
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="field">
+
+                    <label for="notes">
+                        Description
+                    </label>
+
+
+                    <textarea
+                        id="notes"
+                        placeholder="Location, condition, work needed…"
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    class="big"
+                    id="save"
+                    type="button"
+                >
+                    Save Equipment
+                </button>
+
+
+                <button
+                    class="big danger"
+                    id="delete"
+                    type="button"
+                    style="margin-top: 10px;"
+                >
+                    Delete
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+        <div class="footer">
+            Data is stored locally in this browser on this device.
+        </div>
+
+
+    </main>
+
+
+    <!-- PRINTABLE PDF REPORT -->
+
+    <div
+        id="printReport"
+        class="printReport"
+    ></div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>
